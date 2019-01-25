@@ -1,7 +1,8 @@
 #!/bin/bash
 sudo apt-get -y install \
-build-essentials \
+build-essential \
 python3-pip \
 mc \
-tig
+tig \
+awscli
 wget https://github.com/tomnomnom/gron/releases/gron-linux-amd64-0.6.0.tgz
