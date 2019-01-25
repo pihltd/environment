@@ -1,4 +1,5 @@
 #!/bin/bash
+sudo apt update
 sudo apt-get -y install \
 build-essential \
 python3-pip \
