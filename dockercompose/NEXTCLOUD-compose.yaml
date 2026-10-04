@@ -1,0 +1,40 @@
+services:
+  db:
+    image: postgres:latest
+    restart: unless-stopped
+    container_name: nc_postgres
+    volumes:
+      #- dbdata:/var/lib/postgresql
+      #- /mnt/nextcloud/postgres_db:/var/lib/postgresql
+      #- /mnt/nextcloud/postgres_db:/var/lib/postgresql
+      - ./postgres_db:/var/lib/postgresql
+      #- type: bind
+      #- source: ./postgres_db
+      #  target: /var/lib/postgres/data
+    user: 1000:1003
+    environment:
+      - POSTGRES_HOST=db
+      - POSTGRES_DB=nextcloud
+      - POSTGRES_USER=nextcloud
+      - POSTGRES_PASSWORD=GotNextCloud42
+  app:
+    image: nextcloud:latest
+    container_name: nextcloud
+    restart: unless-stopped
+    ports:
+      - 8080:80
+    links:
+      - db
+    volumes:
+      #- nextcloud:/var/www/html
+      #- type: bind
+      #- source: /mnt/nextcloud/nextcloud
+      #  target: /var/www/html
+      - /mnt/nextcloud/nextcloud:/var/www/html
+    environment:
+      - POSTGRES_PASSWORD=GotNexCloud42
+      - POSTGRES_DATABASE=nextcloud
+      - POSTGRES_USER=nextcloud
+      - POSTGRES_HOST=db
+#volumes:
+#  dbdata:

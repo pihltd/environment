@@ -1,0 +1,45 @@
+#volumes:
+#  nextcloud:
+#  db:
+services:
+  db:
+    image: mariadb:11.2.3
+    restart: unless-stopped
+    command: --transaction-isolation=READ-COMMITTED --log-bin=binlog --binlog-format=ROW
+    container_name: nc_mariadb
+    networks:
+      - ncnet
+    volumes:
+      - type: bind
+        source: /mnt/nextcloud/nextcloud_db
+        target: /var/lib/mysql
+      #- db:/var/lib/mysql
+    environment:
+      #- MYSQL_HOST=db
+      - MYSQL_ROOT_PASSWORD=GotAdmin?
+      - MYSQL_PASSWORD=GotNextcloud?
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+
+  app:
+    image: nextcloud:latest
+    container_name: nextcloud
+    restart: unless-stopped
+    ports:
+      - 8080:80
+    links:
+      - db
+    networks:
+      - ncnet
+    volumes:
+      #- nextcloud:/var/www/html
+      - type: bind
+        source: /mnt/nextcloud/nextcloud
+        target: /var/www/html
+    environment:
+      - MYSQL_PASSWORD=GotNexcloud?
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+      - MYSQL_HOST=db
+networks:
+  ncnet:

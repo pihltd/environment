@@ -1,0 +1,29 @@
+services:
+  plex:
+    image: plexinc/pms-docker
+    container_name: plex
+    environment:
+      - PUID=1000
+      - PGID=1003
+      - VERSION=docker
+      - TIMEZONE=America/New_York
+      - PLEX_CLAIM=claim-mJquxeivoY2qw7kkHhXm
+    network_mode: host # Change to 'bridge' to define ports.  Uncomment below
+    #ports:
+    #  - "32400:32400"
+    #  - "3005:3005"
+    #  - "8234:8234"
+    #  - "32469:32469"
+    #  - "1900:1900/udp"
+    #  - "32410:32410/udp"
+    #  - "32412:32412/udp"
+    #  - "32413:31413/udp"
+    #  - "32414:32414/udp"
+    restart: unless-stopped
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./plexconfigs:/config
+      - /mnt/nextcloud/musicbackup:/mnt/music
+      - /mnt/nextcloud/movies:/mnt/movies
+    devices:
+      - /dev/dri:/dev/dri
